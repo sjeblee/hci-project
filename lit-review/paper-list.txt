@@ -1,0 +1,8 @@
+Papers for project lit review
+
+Ahn et al - BandSense: Pressure-sensitive Multitouch Interaction on a Wristband
+Funk et al - Using a Touch-Sensitive Wristband for Text Entry on Smartwatches
+Harrison & Hudson - Abracadabra: Wireless, High Precision, and Unpowered Finger Input for Very Small Mobile Devices
+Knibbe et al - Extending Interaction for Smart Watches: Enabling Bimanual Around Device Control
+Lyons et al - Facet: A Multi-Segment Wrist-Worn System
+Perrault et al - WatchIt: Simple Gestures and Eyes-free Interaction for Wristwatches and Bracelets
