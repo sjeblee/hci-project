@@ -1,0 +1,31 @@
+02-13-17
+Add to lit review:
+     - Chris Harrison - skinput
+     - Chris Harrison - tomo
+
+Proposed Experimental Design
+- Research question
+     - independent variable: touch input surface
+     - dependent variables: time and accuracy on selection and scrolling tasks
+     - is scrolling and selection faster and more accurate on a touch wristband than on a regular touchscreen watch
+- apparatus
+     - smartwatch with arduino touch sensors (watch screen will probably be simulated on an android phone)
+- participants
+     - 12 volunteers, 6 male, 6 female
+- experimental design
+     - app, 6 do touchband first, 6 smartwatch first, mix up selection and scrolling tasks
+- tasks and procedures
+     - scrolling test - find an item in a long list
+     - selection test - select one of 4 colored blocks, then one of 9, then 16
+- measures
+     - speed and accuracy for each task
+     - subjective survey at the end, which input method did the participant prefer for each task?
+- data collection
+     - will be coded into the app - time and accuracy measures for each trial
+     - paper survey at the end
+
+To Do:
+Shamama - see what kinds of touch sensors you have
+Serena - buy a chunky watchband
+Dina - start working on experimental design write-up
+everyone - get set up with Android Studio
