@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.toronto.touchband.touchbandapp">
 
-
     <uses-feature android:name="android.hardware.type.watch" />
 
     <application
