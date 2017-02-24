@@ -29,3 +29,18 @@ Shamama - see what kinds of touch sensors you have
 Serena - buy a chunky watchband
 Dina - start working on experimental design write-up
 everyone - get set up with Android Studio
+
+02-22-17
+- Shamama - sensors and app integration
+- Serena - app metrics and structure
+- Gurleen - app GUI
+- Dina - writing
+
+App structure
+- Start screen - New session
+- Task screen - Scrolling, selection, finish
+- scrolling start screen - item to find and start button
+     - long list of items, goal item placed randomly somewhere in the second half
+- selection start screen - select the black square, start button
+     - 4 colored blocks, 1 black, randomly arranged
+- finish screen - show participant number
