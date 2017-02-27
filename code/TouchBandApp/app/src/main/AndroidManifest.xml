@@ -21,6 +21,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".TaskActivity"
+            android:label="task_activity">
+        </activity>
+        <activity
+            android:name=".ScrollingStartActivity"
+            android:label="scroll_start_activity">
+        </activity>
+        <activity
+            android:name=".ScrollingActivity"
+            android:label="scroll_activity">
+        </activity>
     </application>
 
 </manifest>

@@ -5,17 +5,20 @@ import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 
-public class MainActivity extends WearableActivity {
+/**
+ * Displays the start button and the target item
+ */
+public class ScrollingStartActivity extends WearableActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.start_screen);
     }
 
-    public void startNewSession(View view){
-        // TODO: generate a new participant id
-        Intent intent = new Intent(this, TaskActivity.class);
+    public void start(View view){
+        //TODO: generate target item and pass as an extra
+        Intent intent = new Intent(this, ScrollingActivity.class);
         startActivity(intent);
     }
 }

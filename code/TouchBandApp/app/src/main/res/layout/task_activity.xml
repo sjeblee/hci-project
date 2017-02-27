@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Scrolling"
+        android:onClick="startScrollingActivity"
+        android:id="@+id/scrolling_button"
+        android:layout_weight="0.20" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Selection"
+        android:onClick="startSelectionActivity"
+        android:id="@+id/selection_button"
+        android:layout_weight="0.20" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Finish"
+        android:onClick="endSession"
+        android:id="@+id/finish_button"
+        android:layout_weight="0.20" />
+
+</LinearLayout>
