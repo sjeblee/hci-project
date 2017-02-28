@@ -16,7 +16,8 @@ public class TaskActivity extends WearableActivity {
     }
 
     public void startSelectionActivity(View view){
-        // TODO: launch SelectionActivity
+        Intent intent = new Intent(this, SelectionStartActivity.class);
+        startActivity(intent);
     }
 
     public void startScrollingActivity(View view){

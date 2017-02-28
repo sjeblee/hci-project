@@ -33,6 +33,10 @@
             android:name=".ScrollingActivity"
             android:label="scroll_activity">
         </activity>
+        <activity
+            android:name=".SelectionStartActivity"
+            android:label="scroll_start_activity">
+        </activity>
     </application>
 
 </manifest>
