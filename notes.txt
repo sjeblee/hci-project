@@ -44,3 +44,16 @@ App structure
 - selection start screen - select the black square, start button
      - 4 colored blocks, 1 black, randomly arranged
 - finish screen - show participant number
+
+03-06-17
+- need to filter out people with significant smartwatch experience
+- think about reducing the number of independent variables
+- touch target example
+     - direct manipulation is inherently faster
+     - have them use arrows on the screen to navigate with a cursor
+     - look at Fitt's law procedures and how to calculate accuracy
+     - maybe have a notification dismissal task instead
+- apparatus - mention that arduino is connected to a laptop with a server
+- 5166 Bahen Center at 2pm on Wed
+     
+Shamama - Instructions, consent forms, and hardware
