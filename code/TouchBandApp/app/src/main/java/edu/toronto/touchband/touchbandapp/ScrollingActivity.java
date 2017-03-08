@@ -5,6 +5,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.wearable.activity.WearableActivity;
+import android.view.View;
+import android.widget.AdapterView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,13 +30,25 @@ public class ScrollingActivity extends WearableActivity {
         long seed = System.nanoTime();
         Collections.shuffle(itemList, new Random(seed));
 
-        RecyclerView.Adapter mAdapter = new RecyclerListAdapter(itemList);
+        final RecyclerView.Adapter mAdapter = new RecyclerListAdapter(itemList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(ScrollingActivity.this, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        long endtime = System.currentTimeMillis();
+                        String item = ((RecyclerListAdapter) mAdapter).getItem(position);
 
-        // TODO: add timing
+                        // TODO: check to see if it's the right item, if so, return to start screen
+                        if (item.equals("bananas")) {
+                            ScrollingActivity.this.finish();
+                        }
+                    }
+                })
+        );
+
         long starttime = System.currentTimeMillis();
     }
 }

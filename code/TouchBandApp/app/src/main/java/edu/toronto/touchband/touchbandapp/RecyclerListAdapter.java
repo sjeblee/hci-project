@@ -45,4 +45,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     public int getItemCount() {
         return itemList.size();
     }
+
+    public String getItem(int position) {
+        return itemList.get(position);
+    }
 }
