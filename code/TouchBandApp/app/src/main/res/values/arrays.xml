@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="items">
+        <item>bananas</item>
+        <item>apples</item>
+        <item>cereal</item>
+        <item>chocolate</item>
+        <item>coffee</item>
+        <item>milk</item>
+        <item>eggs</item>
+        <item>juice</item>
+        <item>pasta</item>
+        <item>tea</item>
+        <item>peanuts</item>
+        <item>pizza</item>
+        <item>M&amp;Ms</item>
+        <item>sugar</item>
+        <item>flour</item>
+        <item>baking soda</item>
+        <item>salt</item>
+        <item>cinnamon</item>
+        <item>lettuce</item>
+        <item>cabbage</item>
+        <item>spinach</item>
+        <item>avocados</item>
+        </array>
+</resources>
