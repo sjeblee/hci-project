@@ -17,11 +17,16 @@ import java.util.Random;
  */
 public class ScrollingActivity extends WearableActivity {
 
+    private MetricsManager mMetricsManager;
+    private long mStartTime;
+    private int mWrongSelections = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_layout);
 
+        mMetricsManager = MetricsManager.getInstance();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_launcher_view);
 
         // Load list items from xml and shuffle it
@@ -42,12 +47,21 @@ public class ScrollingActivity extends WearableActivity {
 
                         // TODO: check to see if it's the right item, if so, return to start screen
                         if (item.equals("bananas")) {
+                            long time = endtime - mStartTime;
+                            double acc = 1.0/(mWrongSelections+1);
+                            recordMetric(time, acc);
                             ScrollingActivity.this.finish();
+                        } else {
+                            mWrongSelections++;
                         }
                     }
                 })
         );
 
-        long starttime = System.currentTimeMillis();
+        mStartTime = System.currentTimeMillis();
+    }
+
+    private void recordMetric(long time, double acc) {
+        mMetricsManager.recordMetric("scrolling", time, acc);
     }
 }

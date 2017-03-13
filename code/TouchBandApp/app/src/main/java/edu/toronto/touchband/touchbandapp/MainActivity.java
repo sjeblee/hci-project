@@ -15,8 +15,10 @@ import com.android.volley.toolbox.Volley;
 
 public class MainActivity extends WearableActivity {
 
-    private String mUrl = "http://www.yahoo.com";
+    private final String mUrl = "http://www.yahoo.com";
+    private static final String sUserIdKey = "user_id";
     private RequestQueue mRequestQueue;
+    private MetricsManager mMetricsManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,17 +30,28 @@ public class MainActivity extends WearableActivity {
         mRequestQueue = Volley.newRequestQueue(mContext);
         StringRequest stringRequest = createStringRequest();
         mRequestQueue.add(stringRequest);
+
+        MetricsManager.initInstance(this);
+        mMetricsManager = MetricsManager.getInstance();
+    }
+
+    @Override
+    public void onDestroy() {
+        mMetricsManager.shutdown();
+        super.onDestroy();
     }
 
     public void startNewSession(View view){
-        // TODO: generate a new participant id
+        // Generate a new participant id
+        int id = mMetricsManager.getNewId();
         Intent intent = new Intent(this, TaskActivity.class);
+        intent.putExtra(sUserIdKey, id);
         startActivity(intent);
     }
 
     public void generateTouch() {
         // TODO: generate a touch event on the main thread
-        System.out.println("Generated touch event (not really)");
+        //System.out.println("Generated touch event (not really)");
     }
 
     /**
@@ -50,7 +63,7 @@ public class MainActivity extends WearableActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.err.println("Response is: " + response);
+                        //System.err.println("Response is: " + response);
                         // TODO: get touch info from the response
                         generateTouch();
 
