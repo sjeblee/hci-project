@@ -19,8 +19,8 @@ public class TaskActivity extends WearableActivity {
         mMetricsManager = MetricsManager.getInstance();
     }
 
-    public void startSelectionActivity(View view){
-        Intent intent = new Intent(this, SelectionStartActivity.class);
+    public void startZoomingActivity(View view){
+        Intent intent = new Intent(this, ZoomingStartActivity.class);
         startActivity(intent);
     }
 

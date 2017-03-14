@@ -35,8 +35,12 @@
             android:label="scroll_activity">
         </activity>
         <activity
-            android:name=".SelectionStartActivity"
+            android:name=".ZoomingStartActivity"
             android:label="scroll_start_activity">
+        </activity>
+        <activity
+            android:name=".ZoomingActivity"
+            android:label="zooming_activity">
         </activity>
     </application>
 

@@ -8,7 +8,7 @@ import android.view.View;
 /**
  * Displays the start button and the target item
  */
-public class SelectionStartActivity extends WearableActivity {
+public class ZoomingStartActivity extends WearableActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,8 +17,8 @@ public class SelectionStartActivity extends WearableActivity {
     }
 
     public void start(View view){
-        //TODO: launch Selection activity - you might want 3 separate ones
-        //Intent intent = new Intent(this, SelectionActivity.class);
-        //startActivity(intent);
+        //TODO: launch Zooming activity
+        Intent intent = new Intent(this, ZoomingActivity.class);
+        startActivity(intent);
     }
 }

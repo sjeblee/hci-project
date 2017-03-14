@@ -19,9 +19,9 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Selection"
-        android:onClick="startSelectionActivity"
-        android:id="@+id/selection_button"
+        android:text="Zooming"
+        android:onClick="startZoomingActivity"
+        android:id="@+id/zooming_button"
         android:layout_weight="0.20" />
 
     <Button

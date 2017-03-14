@@ -34,6 +34,8 @@ public class ScrollingActivity extends WearableActivity {
         mTargetItem = intent.getStringExtra("target");
         System.out.println("got target from extra: " + mTargetItem);
 
+        // TODO: make sure the target item is in the second half of the list
+
         mMetricsManager = MetricsManager.getInstance();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_launcher_view);
 
