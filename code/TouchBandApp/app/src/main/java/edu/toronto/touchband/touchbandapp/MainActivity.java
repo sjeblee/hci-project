@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.Request;
@@ -33,6 +34,13 @@ public class MainActivity extends WearableActivity {
 
         MetricsManager.initInstance(this);
         mMetricsManager = MetricsManager.getInstance();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        TextView textview = (TextView) findViewById(R.id.userid);
+        textview.setText("Thank you, your id is " + mMetricsManager.getId());
     }
 
     @Override

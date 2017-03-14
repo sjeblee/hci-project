@@ -9,10 +9,14 @@ import android.view.View;
  * Displays the task options: selection or scrolling, and the finish button
  */
 public class TaskActivity extends WearableActivity {
+
+    MetricsManager mMetricsManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.task_activity);
+        mMetricsManager = MetricsManager.getInstance();
     }
 
     public void startSelectionActivity(View view){
@@ -26,8 +30,11 @@ public class TaskActivity extends WearableActivity {
         startActivity(intent);
     }
 
-    public void endSession(View view){
-        // TODO: end the session
-        // TODO: display the participant id
+    public void endSession(View view) {
+        // TODO: display user id
+
+        // Dump metrics
+        mMetricsManager.printMetrics();
+        this.finish();
     }
 }

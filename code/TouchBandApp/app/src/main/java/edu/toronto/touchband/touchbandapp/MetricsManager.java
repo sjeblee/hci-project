@@ -42,28 +42,30 @@ public class MetricsManager {
                 // Create the data file if it doesn't exist yet
                 File file = new File(mContext.getFilesDir(), mFilename);
                 try {
-                    if (file.exists()) {
+                    /*if (file.exists()) {
                         // Get the last used id number
                         InputStream inputStream = mContext.openFileInput(mFilename);
                         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
                         String line = br.readLine();
                         while (line != null) {
                             System.out.println(line);
-                            String idString = line.substring(0, line.indexOf(','));
-                            if (!idString.equals("id")) {
-                                int id = Integer.parseInt(idString);
-                                if (id != -1) mId.set(id);
+                            if (line.contains(",")) {
+                                String idString = line.substring(0, line.indexOf(','));
+                                if (!idString.equals("id")) {
+                                    int id = Integer.parseInt(idString);
+                                    if (id != -1) mId.set(id);
+                                }
                             }
                             line = br.readLine();
                         }
                         inputStream.close();
                         System.out.println("Last used id: " + mId.get());
 
-                    } else {
+                    } else {*/
                         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(mContext.openFileOutput(mFilename, Context.MODE_PRIVATE));
                         outputStreamWriter.write("id,task,time,accuracy\n");
                         outputStreamWriter.close();
-                    }
+                    //}
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
                 }
@@ -125,5 +127,22 @@ public class MetricsManager {
             }
         };
         mHandler.post(runnable);
+    }
+
+    public void printMetrics() {
+        System.out.println("Metrics:");
+        // Get the last used id number
+        try {
+            InputStream inputStream = mContext.openFileInput(mFilename);
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+            String line = br.readLine();
+            while (line != null) {
+                System.out.println(line);
+                line = br.readLine();
+            }
+            inputStream.close();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 }
