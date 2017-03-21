@@ -3,7 +3,9 @@ package edu.toronto.touchband.touchbandapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.wearable.activity.WearableActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -57,9 +59,30 @@ public class MainActivity extends WearableActivity {
         startActivity(intent);
     }
 
-    public void generateTouch() {
+    public void generateTouch(int startx, int starty, int endx, int endy) {
         // TODO: generate a touch event on the main thread
         //System.out.println("Generated touch event (not really)");
+
+        // TODO: get the current view
+        View view = getWindow().getCurrentFocus();
+
+        // Obtain MotionEvent object
+        long downTime = SystemClock.uptimeMillis();
+        long eventTime = SystemClock.uptimeMillis() + 100;
+        float x = 0.0f;
+        float y = 0.0f;
+        // List of meta states found here:     developer.android.com/reference/android/view/KeyEvent.html#getMetaState()
+        int metaState = 0;
+        MotionEvent motionEvent = null;
+        if ((startx == endx) && (starty == endy)) {
+            motionEvent = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_UP, x, y, metaState);
+        } else {
+            motionEvent = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_MOVE, x, y, metaState);
+        }
+
+
+        // Dispatch touch event to view
+        //view.dispatchTouchEvent(motionEvent);
     }
 
     /**
@@ -73,7 +96,8 @@ public class MainActivity extends WearableActivity {
                     public void onResponse(String response) {
                         //System.err.println("Response is: " + response);
                         // TODO: get touch info from the response
-                        generateTouch();
+                        // TODO: figure out if an up, down, or move event has happened
+                        generateTouch(0, 0, 0, 0);
 
                         // Send the next request
                         mRequestQueue.add(createStringRequest());

@@ -42,7 +42,7 @@ public class MetricsManager {
                 // Create the data file if it doesn't exist yet
                 File file = new File(mContext.getFilesDir(), mFilename);
                 try {
-                    /*if (file.exists()) {
+                    if (file.exists()) {
                         // Get the last used id number
                         InputStream inputStream = mContext.openFileInput(mFilename);
                         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
@@ -61,11 +61,11 @@ public class MetricsManager {
                         inputStream.close();
                         System.out.println("Last used id: " + mId.get());
 
-                    } else {*/
+                    } else {
                         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(mContext.openFileOutput(mFilename, Context.MODE_PRIVATE));
                         outputStreamWriter.write("id,task,time,accuracy\n");
                         outputStreamWriter.close();
-                    //}
+                    }
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
                 }
