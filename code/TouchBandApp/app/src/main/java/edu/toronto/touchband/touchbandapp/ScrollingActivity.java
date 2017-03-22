@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.Random;
 
 /**
@@ -23,6 +24,8 @@ public class ScrollingActivity extends WearableActivity {
     private long mStartTime;
     private int mWrongSelections = 0;
     private String mTargetItem;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,26 +37,33 @@ public class ScrollingActivity extends WearableActivity {
         mTargetItem = intent.getStringExtra("target");
         System.out.println("got target from extra: " + mTargetItem);
 
-        // TODO: make sure the target item is in the second half of the list
-
         mMetricsManager = MetricsManager.getInstance();
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_launcher_view);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_launcher_view);
 
         // Load list items from xml and shuffle it
         ArrayList<String> itemList = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.items)));
+        itemList.remove(itemList.indexOf(mTargetItem));
+        int numItems = itemList.size();
         long seed = System.nanoTime();
         Collections.shuffle(itemList, new Random(seed));
+        int index = ThreadLocalRandom.current().nextInt(numItems/2, numItems);
+        itemList.add(index, mTargetItem);
+
+        // Pad the list with extra values so the last one can be reached
+        for (int i=0; i<3; i++) {
+            itemList.add("");
+        }
 
         final RecyclerView.Adapter mAdapter = new RecyclerListAdapter(itemList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
-        recyclerView.addOnItemTouchListener(
+        mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(ScrollingActivity.this, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         long endtime = System.currentTimeMillis();
-                        String item = ((RecyclerListAdapter) mAdapter).getItem(position);
+                        String item = ((RecyclerListAdapter) mAdapter).getCurrentItem();
 
                         // Check to see if it's the right item, if so, return to start screen
                         if (item.equals(mTargetItem)) {
@@ -67,6 +77,26 @@ public class ScrollingActivity extends WearableActivity {
                     }
                 })
         );
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                //System.out.println("scroll state changed");
+            }
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                int selectedIndex = ((RecyclerListAdapter) mAdapter).getSelectedIndex();
+                int itemIndex = ((RecyclerListAdapter) mAdapter).onScrolled(dy);
+                // Update item highlight
+                if (selectedIndex != itemIndex) {
+                    RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
+                    View oldView = layoutManager.findViewByPosition(selectedIndex);
+                    oldView.setSelected(false);
+                    View itemView = layoutManager.findViewByPosition(itemIndex);
+                    itemView.setSelected(true);
+                }
+            }
+        });
 
         mStartTime = System.currentTimeMillis();
     }
