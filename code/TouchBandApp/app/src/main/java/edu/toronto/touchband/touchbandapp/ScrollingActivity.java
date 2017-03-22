@@ -46,7 +46,7 @@ public class ScrollingActivity extends WearableActivity {
         int numItems = itemList.size();
         long seed = System.nanoTime();
         Collections.shuffle(itemList, new Random(seed));
-        int index = ThreadLocalRandom.current().nextInt(numItems/2, numItems);
+        int index = ThreadLocalRandom.current().nextInt(5, numItems+1);
         itemList.add(index, mTargetItem);
 
         // Pad the list with extra values so the last one can be reached
