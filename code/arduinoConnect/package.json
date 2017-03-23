@@ -1,0 +1,15 @@
+{
+  "name": "arduinoConnect",
+  "description": "Connection of touch inputs to android smartwatch",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "serialport": "^4.0.7",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "express-handlebars": "^3.0.0"
+  },
+  "engines": {
+    "node": "4.4.5"
+  }
+}
