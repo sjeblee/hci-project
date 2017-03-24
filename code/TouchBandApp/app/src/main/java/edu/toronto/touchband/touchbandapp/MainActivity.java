@@ -3,6 +3,7 @@ package edu.toronto.touchband.touchbandapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
+import android.app.Activity;
 import android.view.View;
 import android.widget.TextView;
 

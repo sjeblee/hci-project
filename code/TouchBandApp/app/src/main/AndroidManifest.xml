@@ -36,7 +36,7 @@
         </activity>
         <activity
             android:name=".ZoomingStartActivity"
-            android:label="scroll_start_activity">
+            android:label="zooming_start_activity">
         </activity>
         <activity
             android:name=".ZoomingActivity"
