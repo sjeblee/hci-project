@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 
 // Initialize serial port to read from 
 var serialport = require('serialport');
-var portName = '/dev/cu.usbmodem14141';
+var portName = '/dev/ttyACM0';
 
 var sp = new serialport(portName, {
     baudRate: 9600,
