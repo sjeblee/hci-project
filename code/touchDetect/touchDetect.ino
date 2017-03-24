@@ -34,12 +34,12 @@ void loop()
     value4 -= ref4;       //remove offset
     value5 -= ref5;
 
-    iter = "" + (String)(value0) + " ";
-    iter = iter + (String)(value1) + " ";
-    iter = iter + (String)(value2) + " ";
-    iter = iter + (String)(value3) + " ";
+    iter = "" + (String)(value5) + " ";
     iter = iter + (String)(value4) + " ";
-    iter = iter + (String)(value5);
+    iter = iter + (String)(value3) + " ";
+    iter = iter + (String)(value2) + " ";
+    iter = iter + (String)(value1) + " ";
+    iter = iter + (String)(value0);
     
     Serial.println(iter);
     delay(100);
