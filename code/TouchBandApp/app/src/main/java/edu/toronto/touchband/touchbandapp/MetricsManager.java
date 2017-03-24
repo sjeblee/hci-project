@@ -52,8 +52,12 @@ public class MetricsManager {
                             if (line.contains(",")) {
                                 String idString = line.substring(0, line.indexOf(','));
                                 if (!idString.equals("id")) {
-                                    int id = Integer.parseInt(idString);
-                                    if (id != -1) mId.set(id);
+                                    try {
+                                        int id = Integer.parseInt(idString);
+                                        if (id != -1) mId.set(id);
+                                    } catch (NumberFormatException e) {
+                                        System.err.println(e.getMessage());
+                                    }
                                 }
                             }
                             line = br.readLine();

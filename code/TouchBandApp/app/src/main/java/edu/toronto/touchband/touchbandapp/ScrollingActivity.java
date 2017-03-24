@@ -46,8 +46,7 @@ public class ScrollingActivity extends WearableActivity {
     private AtomicIntegerArray mTouchIndices = new AtomicIntegerArray(6);
     private AtomicInteger mPrevTouchLoc = new AtomicInteger(-1);
     private int yScale = 60;
-    private int mThresh = 80;
-    //private int mXvalue = 160;
+    private int mThresh = 40;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,19 +226,27 @@ public class ScrollingActivity extends WearableActivity {
                             if (maxIndex != -1) {
                                 int totalval = val;
                                 int sum = val * maxIndex;
-                                for (int z = maxIndex - 1; z >= 0; z--) {
+                                /*for (int z = maxIndex - 1; z >= 0; z--) {
                                     if (array[z] < mThresh) {
                                         break;
+                                    }*/
+                                if (maxIndex-1 >=0) {
+                                    int z = maxIndex-1;
+                                    if (array[z] >= mThresh) {
+                                        totalval += array[z];
+                                        sum += (z * array[z]);
                                     }
-                                    totalval += array[z];
-                                    sum += (z * array[z]);
                                 }
-                                for (int r = maxIndex + 1; r < 6; r++) {
+                               /* for (int r = maxIndex + 1; r < 6; r++) {
                                     if (array[r] < mThresh) {
                                         break;
+                                    }*/
+                                if (maxIndex+1<6) {
+                                    int r = maxIndex+1;
+                                    if (array[r] >= mThresh) {
+                                        totalval += array[r];
+                                        sum += (r * array[r]);
                                     }
-                                    totalval += array[r];
-                                    sum += (r * array[r]);
                                 }
 
                                 touchIndex = (double) sum / (double) totalval;
