@@ -57,3 +57,16 @@ App structure
 - 5166 Bahen Center at 2pm on Wed
      
 Shamama - Instructions, consent forms, and hardware
+
+03-24-17
+Notes from pilot study
+- Make sure we explain why we're doing this study and exactly what the task is
+- Maybe add a question to the post-experiment survey about how intuitive they thought the touch interface was
+
+- If we can fix everything by Monday afternoon, we should run as many people as possible
+
+TODO:
+Shamama - Try to make the network faster or transfer data directly from arduino to watch via usb
+Gurleen - Finish the zooming activity, remove the border around the square, and add metrics
+Serena - Make the target item bigger, make the list items smaller, try to optimize scrolling speed
+Dina - poster and paper draft
