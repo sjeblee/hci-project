@@ -8,11 +8,13 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/starttext"
-        android:text="Select the following item from the list:"/>
+        android:textSize="18dp"
+        android:text="Select the following item:"/>
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/targetitemtext"/>
+        android:id="@+id/targetitemtext"
+        android:textSize="40dp"/>
 
     <Button
         android:layout_width="fill_parent"

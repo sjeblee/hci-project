@@ -47,7 +47,7 @@ public class ScrollingActivity extends WearableActivity {
     private AtomicIntegerArray mTouchIndices = new AtomicIntegerArray(6);
     private AtomicInteger mPrevTouchLoc = new AtomicInteger(-1);
     private int yScale = 60;
-    private int mThresh = 40;
+    private int mThresh = 30;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +78,7 @@ public class ScrollingActivity extends WearableActivity {
         itemList.add(index, mTargetItem);
 
         // Pad the list with extra values so the last one can be reached
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 5; i++) {
             itemList.add("");
         }
 
@@ -197,92 +197,92 @@ public class ScrollingActivity extends WearableActivity {
                             //System.out.println("string: " + string);
                             String[] arrays = string.split(",");
                             // Figure out if an up, down, or move event has happened
-                            //for (String arrayString : arrays) {
-                            String arrayString = arrays[arrays.length - 1];
-                            arrayString = arrayString.substring(1, arrayString.length() - 1);
-                            System.out.println("arraystring: " + arrayString);
-                            int[] array = new int[6];
-                            String[] sarray = arrayString.split(" ");
-                            for (int k = 0; k < 6; k++) {
-                                array[k] = Integer.parseInt(sarray[k]);
-                            }
-
-                            boolean moved = false;
-                            boolean started = false;
-                            int newTouchLoc = -1;
-                            int maxIndex = -1;
-                            int val = mThresh;
-
-                            for (int y = 0; y < array.length; y++) {
-                                if (array[y] > val) {
-                                    maxIndex = y;
-                                    val = array[y];
+                            for (String arrayString : arrays) {
+                                //String arrayString = arrays[arrays.length - 1];
+                                arrayString = arrayString.substring(1, arrayString.length() - 1);
+                                System.out.println("arraystring: " + arrayString);
+                                int[] array = new int[6];
+                                String[] sarray = arrayString.split(" ");
+                                for (int k = 0; k < 6; k++) {
+                                    array[k] = Integer.parseInt(sarray[k]);
                                 }
-                            } // end for
 
-                            int y = maxIndex;
-                            System.out.println("maxIndex: " + maxIndex);
-                            double touchIndex = -1.0;
+                                boolean moved = false;
+                                boolean started = false;
+                                int newTouchLoc = -1;
+                                int maxIndex = -1;
+                                int val = mThresh;
 
-                            if (maxIndex != -1) {
-                                int totalval = val;
-                                int sum = val * maxIndex;
+                                for (int y = 0; y < array.length; y++) {
+                                    if (array[y] > val) {
+                                        maxIndex = y;
+                                        val = array[y];
+                                    }
+                                } // end for
+
+                                int y = maxIndex;
+                                System.out.println("maxIndex: " + maxIndex);
+                                double touchIndex = -1.0;
+
+                                if (maxIndex != -1) {
+                                    int totalval = val;
+                                    int sum = val * maxIndex;
                                 /*for (int z = maxIndex - 1; z >= 0; z--) {
                                     if (array[z] < mThresh) {
                                         break;
                                     }*/
-                                if (maxIndex-1 >=0) {
-                                    int z = maxIndex-1;
-                                    if (array[z] >= mThresh) {
-                                        totalval += array[z];
-                                        sum += (z * array[z]);
+                                    if (maxIndex - 1 >= 0) {
+                                        int z = maxIndex - 1;
+                                        if (array[z] >= mThresh) {
+                                            totalval += array[z];
+                                            sum += (z * array[z]);
+                                        }
                                     }
-                                }
                                /* for (int r = maxIndex + 1; r < 6; r++) {
                                     if (array[r] < mThresh) {
                                         break;
                                     }*/
-                                if (maxIndex+1<6) {
-                                    int r = maxIndex+1;
-                                    if (array[r] >= mThresh) {
-                                        totalval += array[r];
-                                        sum += (r * array[r]);
+                                    if (maxIndex + 1 < 6) {
+                                        int r = maxIndex + 1;
+                                        if (array[r] >= mThresh) {
+                                            totalval += array[r];
+                                            sum += (r * array[r]);
+                                        }
+                                    }
+
+                                    touchIndex = (double) sum / (double) totalval;
+                                    newTouchLoc = (int) (touchIndex * (double) yScale);
+                                    System.out.println("touchIndex: " + touchIndex + "newTouchLoc: " + newTouchLoc);
+                                }
+
+
+                                System.out.println("PrevTouchLoc: " + mPrevTouchLoc.get());
+                                if (mTouch.get() && (newTouchLoc != (mPrevTouchLoc.get())) && (maxIndex != -1)) {
+                                    moved = true;
+                                } else if ((maxIndex != -1) && !mTouch.get()) {
+                                    started = true;
+                                }
+
+                                // Check for ACTION_UP
+                                if (mTouch.get() && maxIndex < 0) {
+                                    generateTouch(MotionEvent.ACTION_UP, mPrevTouchLoc.get(), mPrevTouchLoc.get());
+                                    mTouch.compareAndSet(true, false);
+                                } else { // ACTION_DOWN or ACTION_MOVE
+                                    if (started) {
+                                        mTouch.compareAndSet(false, true);
+                                        generateTouch(MotionEvent.ACTION_DOWN, newTouchLoc, newTouchLoc);
+                                    } else if (moved) {
+                                        generateTouch(MotionEvent.ACTION_MOVE, mPrevTouchLoc.get(), newTouchLoc);
                                     }
                                 }
 
-                                touchIndex = (double) sum / (double) totalval;
-                                newTouchLoc = (int) (touchIndex * (double) yScale);
-                                System.out.println("touchIndex: " + touchIndex + "newTouchLoc: " + newTouchLoc);
-                            }
-
-
-                            System.out.println("PrevTouchLoc: " + mPrevTouchLoc.get());
-                            if (mTouch.get() && (newTouchLoc != (mPrevTouchLoc.get())) && (maxIndex != -1)) {
-                                moved = true;
-                            } else if ((maxIndex != -1) && !mTouch.get()) {
-                                started = true;
-                            }
-
-                            // Check for ACTION_UP
-                            if (mTouch.get() && maxIndex < 0) {
-                                generateTouch(MotionEvent.ACTION_UP, mPrevTouchLoc.get(), mPrevTouchLoc.get());
-                                mTouch.compareAndSet(true, false);
-                            } else { // ACTION_DOWN or ACTION_MOVE
-                                if (started) {
-                                    mTouch.compareAndSet(false, true);
-                                    generateTouch(MotionEvent.ACTION_DOWN, newTouchLoc, newTouchLoc);
-                                } else if (moved) {
-                                    generateTouch(MotionEvent.ACTION_MOVE, mPrevTouchLoc.get(), newTouchLoc);
+                                // Save new touch info
+                                for (int j = 0; j < array.length; j++) {
+                                    mTouchIndices.set(j, array[j]);
                                 }
+                                mPrevTouchLoc.set(newTouchLoc);
                             }
-
-                            // Save new touch info
-                            for (int j = 0; j < array.length; j++) {
-                                mTouchIndices.set(j, array[j]);
-                            }
-                            mPrevTouchLoc.set(newTouchLoc);
                         }
-
                         // Send the next request
                         mRequestQueue.add(createStringRequest());
                     }

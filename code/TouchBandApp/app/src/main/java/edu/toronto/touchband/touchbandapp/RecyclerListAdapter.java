@@ -65,7 +65,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             mSelectedPos = 0;
         } else {
             // Recalculate visible item
-            int index = (mPixelPos / 80) + 1;
+            int index = (mPixelPos / 55) + 1;
             //System.out.println("scroll position: " + mPixelPos + ", item: " + index);
             mSelectedPos = index;
         }
