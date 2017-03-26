@@ -42,5 +42,5 @@ void loop()
     iter = iter + (String)(value0);
     
     Serial.println(iter);
-    delay(100);
+    delay(50);
 }
