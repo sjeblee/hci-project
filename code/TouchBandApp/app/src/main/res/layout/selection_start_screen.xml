@@ -8,7 +8,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/starttext"
-        android:text="Click the black square"/>
+        android:textSize="20dp"
+        android:text="Zoom in until the blue square fills the screen."/>
 
     <Button
         android:layout_width="fill_parent"
