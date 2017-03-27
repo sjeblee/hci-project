@@ -20,22 +20,22 @@ public class TaskActivity extends WearableActivity {
         mMetricsManager = MetricsManager.getInstance();
     }
 
-    public void startZoomingActivity(View view){
+    public void startZoomingActivity(View view) {
         Intent intent = new Intent(this, ZoomingStartActivity.class);
         startActivity(intent);
     }
 
-    public void startScrollingActivity(View view){
-        //TODO: pass participant id as an extra
+    public void startScrollingActivity(View view) {
         Intent intent = new Intent(this, ScrollingStartActivity.class);
         startActivity(intent);
     }
 
     public void endSession(View view) {
-        // TODO: display user id
 
         // Dump metrics
-        mMetricsManager.printMetrics();
+        if (mMetricsManager != null) {
+            mMetricsManager.printMetrics();
+        }
         this.finish();
     }
 }

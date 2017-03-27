@@ -12,13 +12,14 @@ import android.app.Activity;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.android.volley.toolbox.*;
 
+//import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -56,7 +57,15 @@ public class ScrollingActivity extends WearableActivity {
 
         // Start the HTTP request queue
         final Context mContext = this;
-        mRequestQueue = Volley.newRequestQueue(mContext);
+        DiskBasedCache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024);
+        Network network = new BasicNetwork(new HurlStack());
+        mRequestQueue = new RequestQueue(cache, network);
+        mRequestQueue.start();
+
+        // Clear the cache
+        mRequestQueue.add(new ClearCacheRequest(cache, null));
+
+        // Start sending get requests
         StringRequest stringRequest = createStringRequest();
         mRequestQueue.add(stringRequest);
 
@@ -135,8 +144,20 @@ public class ScrollingActivity extends WearableActivity {
     }
 
     @Override
-    public void onDestroy() {
+    public void onPause() {
         mRequestQueue.stop();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mRequestQueue.start();
+    }
+
+    @Override
+    public void onDestroy() {
+        //mRequestQueue.stop();
         super.onDestroy();
     }
 
@@ -292,6 +313,7 @@ public class ScrollingActivity extends WearableActivity {
                 System.err.println("Error from Volley GET request!");
             }
         });
+        stringRequest.setShouldCache(false);
         return stringRequest;
     }
 }
