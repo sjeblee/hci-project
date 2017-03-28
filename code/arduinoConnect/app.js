@@ -33,7 +33,10 @@ var buf = []
 
 // Read data from serial port and add to buff
 sp.on('data', function(input) {
-	buf.push(input)
+    buf.push(input)
+    if (buf.length > 50) {
+	buf.shift()
+    }
 });
 
 // Get navigation bar 
