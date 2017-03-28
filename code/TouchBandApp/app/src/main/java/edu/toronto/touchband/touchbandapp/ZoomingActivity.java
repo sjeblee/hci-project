@@ -8,7 +8,9 @@ import android.support.wearable.activity.WearableActivity;
 import android.app.Activity;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.android.volley.Network;
 import com.android.volley.Request;
@@ -31,6 +33,7 @@ public class ZoomingActivity extends WearableActivity {
     private Matrix matrix;
     float scale = 0.1f;
     private ScaleGestureDetector SGD;
+    private MetricsManager mMetricsManager;
 
     // Stuff for touch input
     private RequestQueue mRequestQueue;
@@ -41,14 +44,20 @@ public class ZoomingActivity extends WearableActivity {
 
     private AtomicIntegerArray mTouchIndices = new AtomicIntegerArray(6);
     private AtomicInteger mPrevTouchLoc1 = new AtomicInteger(-1);
-    private AtomicInteger mPrevTouchLoc2 = new AtomicInteger(-1);
+    private AtomicInteger mDownLoc= new AtomicInteger(-1);
     private int yScale = 60;
     private int mThresh = 30;
+    private float mImageScale = 1.0f;
+    private long mStartTime = 0;
+    private int mImageSize = 260;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.zooming_activity);
+        mMetricsManager = MetricsManager.getInstance();
+
 
         iv = (ImageView) findViewById(R.id.img);
         SGD = new ScaleGestureDetector(this, new ScaleListener());
@@ -72,17 +81,26 @@ public class ZoomingActivity extends WearableActivity {
     @Override
     public void onPause() {
         mRequestQueue.stop();
+        // Record metrics
+        System.out.println("mImageScale: " + mImageScale);
+        System.out.println("iv.width: " + iv.getWidth());
+        float acc = 1.0f - Math.abs((float) (360 - (mImageScale*mImageSize))/360.0f);
+        long time = System.currentTimeMillis() - mStartTime;
+        mMetricsManager.recordMetric("zooming", time, acc);
+        //ZoomingActivity.this.finish();
         super.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        mStartTime = System.currentTimeMillis();
         mRequestQueue.start();
     }
 
     @Override
     public void onDestroy() {
+        mRequestQueue.stop();
         super.onDestroy();
     }
 
@@ -98,6 +116,8 @@ public class ZoomingActivity extends WearableActivity {
         public boolean onScale(ScaleGestureDetector detector) {
             scale *= detector.getScaleFactor();
             scale = Math.max(1.0f, Math.min(scale, 10.0f));
+            System.out.println("scale: " + scale);
+            mImageScale = scale;
             matrix.setScale(scale, scale);
             iv.setImageMatrix(matrix);
             return true;
@@ -115,34 +135,30 @@ public class ZoomingActivity extends WearableActivity {
         // List of meta states found here:     developer.android.com/reference/android/view/KeyEvent.html#getMetaState()
         int metaState = 0;
         MotionEvent motionEvent = null;
-        /*if ((eventType == MotionEvent.ACTION_DOWN) || (eventType == MotionEvent.ACTION_UP)) {
-            motionEvent = MotionEvent.obtain(downTime, eventTime, eventType, 0, end/2, metaState);
-        } else if (eventType == MotionEvent.ACTION_MOVE) {*/
-        System.out.println("Creating move event");
-        MotionEvent.PointerCoords[] pointerCoords = new MotionEvent.PointerCoords[2];
+        if ((eventType == MotionEvent.ACTION_DOWN) || (eventType == MotionEvent.ACTION_UP)) {
+            motionEvent = MotionEvent.obtain(downTime, eventTime, eventType, 0, end, metaState);
 
-        // First pointer
-        MotionEvent.PointerCoords pc = new MotionEvent.PointerCoords();
-        pc.setAxisValue(MotionEvent.AXIS_Y, end / 2);
-        System.out.println("Point 1: " + end / 2);
-        pc.setAxisValue(MotionEvent.AXIS_X, 160);
-        pointerCoords[0] = pc;
-        MotionEvent.PointerProperties pointerProps = new MotionEvent.PointerProperties();
-        pointerProps.id = 0;
-
-        // Second pointer
-        MotionEvent.PointerCoords pc1 = new MotionEvent.PointerCoords();
-        pc1.setAxisValue(MotionEvent.AXIS_Y, (360 - (end / 2)));
-        System.out.println("Point 2: " + (360 - (end / 2)));
-        pc1.setAxisValue(MotionEvent.AXIS_X, 160);
-        pointerCoords[1] = pc1;
-        MotionEvent.PointerProperties pointerProps1 = new MotionEvent.PointerProperties();
-        pointerProps.id = 1;
-
-        MotionEvent.PointerProperties[] pointerProperties = {pointerProps, pointerProps1};
-        motionEvent = MotionEvent.obtain(downTime, eventTime, eventType, 1, pointerProperties, pointerCoords, metaState, 0,
-                0.01f, 0.01f, 0, 0, 0, 0);
-        // }
+            if (eventType == MotionEvent.ACTION_DOWN) {
+                mDownLoc.set(end);
+            } else if (eventType == MotionEvent.ACTION_UP) {
+                if (end == mDownLoc.get()) {
+                    // Record metrics
+                    System.out.println("mImageScale: " + mImageScale);
+                    System.out.println("iv.width: " + iv.getWidth());
+                    float acc = 1.0f - Math.abs((float) (360 - (mImageScale*mImageSize))/360.0f);
+                    long time = System.currentTimeMillis() - mStartTime;
+                    mMetricsManager.recordMetric("zooming", time, acc);
+                    ZoomingActivity.this.finish();
+                }
+                mDownLoc.set(-1);
+            }
+        } else if (eventType == MotionEvent.ACTION_MOVE) {
+            float scale = mImageScale + (((float)start - (float)end)/360.f);
+            System.out.println("scale: " + scale);
+            matrix.setScale(scale, scale);
+            mImageScale = scale;
+            iv.setImageMatrix(matrix);
+        }
 
         // Dispatch touch event to view
         if (motionEvent != null) {
@@ -177,7 +193,7 @@ public class ZoomingActivity extends WearableActivity {
                                 String arrayString = arrays[x];
                                 //String arrayString = arrays[arrays.length - 1];
                                 arrayString = arrayString.substring(1, arrayString.length() - 1);
-                                System.out.println("arraystring: " + arrayString);
+                                //System.out.println("arraystring: " + arrayString);
                                 int[] array = new int[6];
                                 String[] sarray = arrayString.split(" ");
                                 for (int k = 0; k < 6; k++) {
@@ -200,15 +216,9 @@ public class ZoomingActivity extends WearableActivity {
                                         val1 = array[y];
                                     }
                                 }
-                                /*for (int y = 3; y < 6; y++) {
-                                    if (array[y] > val2) {
-                                        maxIndex2 = y;
-                                        val2 = array[y];
-                                    }
-                                } */// end for
 
                                 //int y = maxIndex;
-                                System.out.println("maxIndex1: " + maxIndex1); //+ ", maxIndex2: " + maxIndex2);
+                                //System.out.println("maxIndex1: " + maxIndex1); //+ ", maxIndex2: " + maxIndex2);
                                 double touchIndex1 = -1.0;
                                 double touchIndex2 = -1.0;
 
@@ -235,37 +245,10 @@ public class ZoomingActivity extends WearableActivity {
 
                                     touchIndex1 = (double) sum / (double) totalval;
                                     newTouchLoc1 = (int) (touchIndex1 * (double) yScale);
-                                    System.out.println("touchIndex1: " + touchIndex1 + "newTouchLoc1: " + newTouchLoc1);
+                                    //System.out.println("touchIndex1: " + touchIndex1 + "newTouchLoc1: " + newTouchLoc1);
                                 }
 
-                                // Second touch
-                                /*if (maxIndex2 != -1) {
-                                    int totalval = val2;
-                                    int sum = val2 * maxIndex2;
-
-                                    if (maxIndex2 - 1 >= 0) {
-                                        int z = maxIndex2 - 1;
-                                        if (array[z] >= mThresh) {
-                                            totalval += array[z];
-                                            sum += (z * array[z]);
-                                        }
-                                    }
-
-                                    if (maxIndex2 + 1 < 6) {
-                                        int r = maxIndex2 + 1;
-                                        if (array[r] >= mThresh) {
-                                            totalval += array[r];
-                                            sum += (r * array[r]);
-                                        }
-                                    }
-
-                                    touchIndex2 = (double) sum / (double) totalval;
-                                    newTouchLoc2 = (int) (touchIndex2 * (double) yScale);
-                                    System.out.println("touchIndex2: " + touchIndex2 + "newTouchLoc2: " + newTouchLoc2);
-                                }*/
-
-
-                                System.out.println("PrevTouchLoc1: " + mPrevTouchLoc1.get());
+                               // System.out.println("PrevTouchLoc1: " + mPrevTouchLoc1.get());
                                 if (mTouch1.get() && (newTouchLoc1 != (mPrevTouchLoc1.get())) && (maxIndex1 != -1)) {
                                     moved1 = true;
                                 } else if ((maxIndex1 != -1) && !mTouch1.get()) {
@@ -285,26 +268,6 @@ public class ZoomingActivity extends WearableActivity {
                                     }
                                 }
 
-                               /* System.out.println("PrevTouchLoc2: " + mPrevTouchLoc2.get());
-                                if (mTouch2.get() && (newTouchLoc2 != (mPrevTouchLoc2.get())) && (maxIndex2 != -1)) {
-                                    moved2 = true;
-                                } else if ((maxIndex2 != -1) && !mTouch2.get()) {
-                                    started2 = true;
-                                }
-
-                                // Check for ACTION_UP
-                                if (mTouch2.get() && maxIndex2 < 0) {
-                                    generateTouch(MotionEvent.ACTION_UP, mPrevTouchLoc2.get(), mPrevTouchLoc2.get());
-                                    mTouch2.compareAndSet(true, false);
-                                } else { // ACTION_DOWN or ACTION_MOVE
-                                    if (started2) {
-                                        mTouch2.compareAndSet(false, true);
-                                        generateTouch(MotionEvent.ACTION_DOWN, newTouchLoc2, newTouchLoc2);
-                                    } else if (moved2) {
-                                        generateTouch(MotionEvent.ACTION_MOVE, mPrevTouchLoc2.get(), newTouchLoc2);
-                                    }
-                                }*/
-
                                 // Save new touch info
                                 for (int j = 0; j < array.length; j++) {
                                     mTouchIndices.set(j, array[j]);
@@ -320,9 +283,10 @@ public class ZoomingActivity extends WearableActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.err.println("Error from Volley GET request!");
+                mRequestQueue.add(createStringRequest());
             }
         });
-        stringRequest.setShouldCache(false);
+        //stringRequest.setShouldCache(false);
         return stringRequest;
     }
 }

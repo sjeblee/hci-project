@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/zooming_layout">
 
     <ImageView
         android:id="@+id/img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="45dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
         android:cropToPadding="true"
         android:scaleType="matrix"
-        android:src="@drawable/images2" />
+        android:src="@drawable/smiley2" />
 
 </LinearLayout>

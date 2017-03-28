@@ -157,7 +157,7 @@ public class ScrollingActivity extends WearableActivity {
 
     @Override
     public void onDestroy() {
-        //mRequestQueue.stop();
+        mRequestQueue.stop();
         super.onDestroy();
     }
 
@@ -248,10 +248,7 @@ public class ScrollingActivity extends WearableActivity {
                                 if (maxIndex != -1) {
                                     int totalval = val;
                                     int sum = val * maxIndex;
-                                /*for (int z = maxIndex - 1; z >= 0; z--) {
-                                    if (array[z] < mThresh) {
-                                        break;
-                                    }*/
+
                                     if (maxIndex - 1 >= 0) {
                                         int z = maxIndex - 1;
                                         if (array[z] >= mThresh) {
@@ -259,11 +256,8 @@ public class ScrollingActivity extends WearableActivity {
                                             sum += (z * array[z]);
                                         }
                                     }
-                               /* for (int r = maxIndex + 1; r < 6; r++) {
-                                    if (array[r] < mThresh) {
-                                        break;
-                                    }*/
                                     if (maxIndex + 1 < 6) {
+
                                         int r = maxIndex + 1;
                                         if (array[r] >= mThresh) {
                                             totalval += array[r];
@@ -311,6 +305,7 @@ public class ScrollingActivity extends WearableActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.err.println("Error from Volley GET request!");
+                mRequestQueue.add(createStringRequest());
             }
         });
         stringRequest.setShouldCache(false);

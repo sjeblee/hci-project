@@ -10,6 +10,7 @@ import android.view.View;
  * Displays the start button and the target item
  */
 public class ZoomingStartActivity extends WearableActivity {
+    private int mCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,8 +19,18 @@ public class ZoomingStartActivity extends WearableActivity {
     }
 
     public void start(View view){
-        //TODO: launch Zooming activity
+        // launch Zooming activity
+        mCounter++;
         Intent intent = new Intent(this, ZoomingActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Quit after 10 iterations
+        if (mCounter >= 10) {
+            this.finish();
+        }
     }
 }
