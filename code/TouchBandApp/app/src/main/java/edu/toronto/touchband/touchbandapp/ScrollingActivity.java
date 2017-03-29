@@ -43,13 +43,13 @@ public class ScrollingActivity extends WearableActivity {
     private RecyclerView mRecyclerView;
 
     private RequestQueue mRequestQueue;
-    private final String mUrl = "http://172.31.35.62:3000/touchInfo";
+    private final String mUrl = "http://192.168.43.91:3000/touchInfo";
 
     private AtomicBoolean mTouch = new AtomicBoolean(false);
     private AtomicIntegerArray mTouchIndices = new AtomicIntegerArray(6);
     private AtomicInteger mPrevTouchLoc = new AtomicInteger(-1);
     private int yScale = 60;
-    private int mThresh = 30;
+    private int mThresh = 80;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

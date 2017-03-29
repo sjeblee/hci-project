@@ -44,7 +44,7 @@ public class ZoomingActivity extends WearableActivity {
 
     // Stuff for touch input
     private RequestQueue mRequestQueue;
-    private final String mUrl = "http://172.31.35.62:3000/touchInfo";
+    private final String mUrl = "http://192.168.43.91:3000/touchInfo";
 
     private AtomicBoolean mTouch1 = new AtomicBoolean(false);
     private AtomicBoolean mTouch2 = new AtomicBoolean(false);
@@ -55,8 +55,10 @@ public class ZoomingActivity extends WearableActivity {
     private AtomicInteger mDownLoc = new AtomicInteger(-1);
     private AtomicInteger mDownLoc1 = new AtomicInteger(-1);
     private AtomicInteger mDownLoc2 = new AtomicInteger(-1);
+    private boolean mMoved1 = false;
+    private boolean mMoved2 = false;
     private int yScale = 60;
-    private int mThresh = 30;
+    private int mThresh = 80;
     private float mImageScale = 1.0f;
     private long mStartTime = 0;
     private int mImageSize = 260;
@@ -100,10 +102,12 @@ public class ZoomingActivity extends WearableActivity {
                         if (pindex1 != -1) {
                             mDownLoc1.set(yindex1);
                             mPrevTouchLoc1.set(yindex1);
+                            mMoved1 = false;
                         }
                         if (pindex2 != -1) {
                             mDownLoc2.set(yindex2);
                             mPrevTouchLoc2.set(yindex2);
+                            mMoved2 = false;
                         }
                         return true;
                     case (MotionEvent.ACTION_MOVE):
@@ -119,6 +123,12 @@ public class ZoomingActivity extends WearableActivity {
                         }
                         float diff1 = ((float) mPrevTouchLoc1.get() - (float) yindex1);
                         float diff2 = ((float) mPrevTouchLoc2.get() - (float) yindex2);
+                        if (diff1 != 0) {
+                            mMoved1 = true;
+                        }
+                        if (diff2 != 0) {
+                            mMoved2 = true;
+                        }
                         // Ignore if not a pinch gesture
                         if ((diff1 > 0 && diff2 > 0) || (diff1 < 0 && diff2 < 0) || (diff1 == 0 && diff2 == 0)) {
                            // System.out.println("ignoring");
@@ -154,13 +164,13 @@ public class ZoomingActivity extends WearableActivity {
                     case (MotionEvent.ACTION_POINTER_UP):
                     case (MotionEvent.ACTION_UP):
                         System.out.println("Action UP");
-                        if ((((yindex1 != -1) && (yindex1 == mDownLoc1.get()))
-                            || ((yindex2 != -1) && (yindex2 == mDownLoc2.get())))) {
+                        if ((((yindex1 != -1) && (yindex1 == mDownLoc1.get()) && !mMoved1)
+                            || ((yindex2 != -1) && (yindex2 == mDownLoc2.get()) && !mMoved2))) {
                             //System.out.println("mDownLoc1: " + mDownLoc1.get() + " yindex1: " + yindex1);
                             //System.out.println("mDownLoc2: " + mDownLoc2.get() + " yindex2: " + yindex2);
                             // Record metrics
                             System.out.println("mImageScale: " + mImageScale);
-                            System.out.println("iv.width: " + iv.getWidth());
+                            //System.out.println("iv.width: " + iv.getWidth());
                             float acc = 1.0f - Math.abs((float) (360 - (mImageScale * mImageSize)) / 360.0f);
                             long time = System.currentTimeMillis() - mStartTime;
                             mMetricsManager.recordMetric("zooming", time, acc);
@@ -169,10 +179,12 @@ public class ZoomingActivity extends WearableActivity {
                             if (pindex1 != -1) {
                                 mDownLoc1.set(-1);
                                 mPrevTouchLoc1.set(-1);
+                                mMoved1 = false;
                             }
                             if (pindex2 != -1) {
                                 mDownLoc2.set(-1);
                                 mPrevTouchLoc2.set(-1);
+                                mMoved2 = false;
                             }
                         }
                         return true;

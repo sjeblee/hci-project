@@ -31,7 +31,7 @@ public class ScrollingStartActivity extends WearableActivity {
     public void onResume() {
         super.onResume();
         // Quit after 10 iterations
-        if (mCounter >= 10) {
+        if (mCounter >= 5) {
             this.finish();
         }
 
