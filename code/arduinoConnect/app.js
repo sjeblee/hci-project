@@ -34,7 +34,7 @@ var buf = []
 // Read data from serial port and add to buff
 sp.on('data', function(input) {
     buf.push(input)
-    if (buf.length > 50) {
+    if (buf.length > 150) {
 	buf.shift()
     }
 });
