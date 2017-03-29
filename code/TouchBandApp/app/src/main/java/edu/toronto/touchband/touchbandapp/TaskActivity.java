@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.app.Activity;
 import android.view.View;
+import android.view.WindowManager;
 
 /**
  * Displays the task options: selection or scrolling, and the finish button
@@ -17,6 +18,7 @@ public class TaskActivity extends WearableActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.task_activity);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mMetricsManager = MetricsManager.getInstance();
     }
 

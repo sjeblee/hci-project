@@ -3,8 +3,8 @@ package edu.toronto.touchband.touchbandapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
-import android.app.Activity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 public class MainActivity extends WearableActivity {
@@ -17,6 +17,7 @@ public class MainActivity extends WearableActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         MetricsManager.initInstance(this);
         mMetricsManager = MetricsManager.getInstance();

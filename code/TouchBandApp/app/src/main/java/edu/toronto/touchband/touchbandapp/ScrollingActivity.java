@@ -11,6 +11,7 @@ import android.support.wearable.activity.WearableActivity;
 import android.app.Activity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.android.volley.Network;
 import com.android.volley.Request;
@@ -54,6 +55,7 @@ public class ScrollingActivity extends WearableActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_layout);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // Start the HTTP request queue
         final Context mContext = this;
